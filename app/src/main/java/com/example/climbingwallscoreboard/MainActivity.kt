@@ -142,6 +142,11 @@ class MainActivity : ComponentActivity() {
         Log.i("LIFECYCLE", "Started!")
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putIntArray(savedState, intArrayOf(score,climbs,isFailed.compareTo(true)))
+    }
+
     override fun onPause() {
         super.onPause()
         Log.i("LIFECYCLE: ", "Paused!")
@@ -150,10 +155,6 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         Log.i("LIFECYCLE", "Resumed!")
-    }
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putIntArray(savedState, intArrayOf(score,climbs,isFailed.compareTo(true)))
     }
 
     override fun onStop() {
