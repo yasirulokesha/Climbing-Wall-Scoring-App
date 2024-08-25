@@ -8,28 +8,36 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Lifecycle
 
 class MainActivity : ComponentActivity() {
 
     private var score:Int = 0
     private var climbs:Int = 0
 
+    private var isFailed: Boolean = false
+
     private val savedState:String = ""
-
-    private val resultArray:IntArray = intArrayOf()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.scoreboard)
 
+        val climbBtn = findViewById<Button>(R.id.climb_btn)
+        val resetBtn = findViewById<Button>(R.id.reset_btn)
+        val fallBtn = findViewById<Button>(R.id.fall_btn)
+
         if (savedInstanceState != null) {
             val savedState = savedInstanceState.getIntArray(savedState)
-            if (savedState != null && savedState.size == 2) {
-                score = savedState[0]  // Restore the score value
-                climbs = savedState[1] // Restore the climbs value
+            if (savedState != null && savedState.size == 3) {
+                score = savedState[0]
+                climbs = savedState[1]
+                if (savedState[2] == 0){
+                    climbBtn.text = getString(R.string.try_again)
+                    isFailed = true
+                    resetBtn.visibility = View.INVISIBLE
+                    fallBtn.visibility = View.INVISIBLE
+                }
             }
         }
 
@@ -46,11 +54,17 @@ class MainActivity : ComponentActivity() {
         when {
             score == 0 -> {
                 scoreTextView.text = getString(R.string.total_score)
-                resetBtn.visibility = View.INVISIBLE
-                fallBtn.visibility = View.INVISIBLE
             }
             score > 0 -> {
                 scoreTextView.text = score.toString()
+            }
+        }
+
+        when {
+            isFailed -> {
+                resetBtn.visibility = View.INVISIBLE
+                fallBtn.visibility = View.INVISIBLE
+            } else -> {
                 resetBtn.visibility = View.VISIBLE
                 fallBtn.visibility = View.VISIBLE
             }
@@ -68,11 +82,24 @@ class MainActivity : ComponentActivity() {
     }
 
     fun onClickClimb(view: View?){
-        score = climb(score)
+        val climbBtn = findViewById<Button>(R.id.climb_btn)
+
         when{
-            climbs < 9 -> climbs += 1
-            else -> climbs = 0
+            isFailed -> {
+                climbBtn.text = getString(R.string.climb_btn_text)
+                score = 0
+                climbs = 0
+                isFailed = false
+            }
+            else -> {
+                score = climb(score)
+                when{
+                    climbs < 9 -> climbs += 1
+                    else -> climbs = 0
+                }
+            }
         }
+
         println("Score$score\n Climbs$climbs")
         updateDashboard()
     }
@@ -80,6 +107,7 @@ class MainActivity : ComponentActivity() {
     fun onClickFall(view: View?){
         val resetBtn = findViewById<Button>(R.id.reset_btn)
         val fallBtn = findViewById<Button>(R.id.fall_btn)
+        val climbBtn = findViewById<Button>(R.id.climb_btn)
 
         score = fall(score)
 
@@ -87,11 +115,10 @@ class MainActivity : ComponentActivity() {
 
         updateDashboard()
 
-        score = 0
-        climbs = 0
-
         resetBtn.visibility = View.INVISIBLE
         fallBtn.visibility = View.INVISIBLE
+        climbBtn.text = getString(R.string.try_again)
+        isFailed = true
 
     }
 
@@ -109,7 +136,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putIntArray(savedState, intArrayOf(score,climbs))
+        outState.putIntArray(savedState, intArrayOf(score,climbs,isFailed.compareTo(true)))
     }
 
 }

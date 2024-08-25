@@ -12,4 +12,5 @@
         <item>සිංහල</item>
         <item>English</item>
     </string-array>
+    <string name="try_again">Try Again !</string>
 </resources>
