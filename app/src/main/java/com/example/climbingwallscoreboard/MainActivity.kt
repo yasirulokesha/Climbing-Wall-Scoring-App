@@ -42,6 +42,8 @@ class MainActivity : ComponentActivity() {
         }
 
         updateDashboard()
+
+        Log.i("LIFECYCLE", "Created!")
     }
 
     private fun updateDashboard(){
@@ -78,7 +80,6 @@ class MainActivity : ComponentActivity() {
             climbs <= 9 -> scoreTextView.setTextColor(ContextCompat.getColor(this, R.color.red))
             else -> scoreTextView.setTextColor(ContextCompat.getColor(this, R.color.default_blue))
         }
-
     }
 
     fun onClickClimb(view: View?){
@@ -100,7 +101,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        println("Score$score\n Climbs$climbs")
         updateDashboard()
     }
 
@@ -110,8 +110,6 @@ class MainActivity : ComponentActivity() {
         val climbBtn = findViewById<Button>(R.id.climb_btn)
 
         score = fall(score)
-
-        println("Score$score\n Climbs$climbs")
 
         updateDashboard()
 
@@ -125,24 +123,37 @@ class MainActivity : ComponentActivity() {
     fun onClickReset(view: View?){
         score = 0
         climbs = 0
-        println("Score$score\n Climbs$climbs")
         updateDashboard()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.i("LIFECYCLE", "Started!")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.i("onSaveInstate: ", "saved")
+        Log.i("LIFECYCLE: ", "Paused!")
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.i("LIFECYCLE", "Resumed!")
+    }
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putIntArray(savedState, intArrayOf(score,climbs,isFailed.compareTo(true)))
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.i("LIFECYCLE", "Stopped!")
+    }
+
 }
 
 fun climb(score:Int): Int {
-    var total: Int = 0
+    var total = 0
     if (score<3){
         total = score+1
     }else if ( score < 9){
