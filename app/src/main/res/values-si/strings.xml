@@ -3,6 +3,7 @@
     <string name="reset_btn_text">නැවත උත්සාහ කරනවා</string>
     <string name="climb_btn_text">නගිනවා</string>
     <string name="fall_btn_text">වැටෙනවා</string>
+    <string name="total_score">ආරම්භ කරන්න</string>
     <string name="total_score_text">මුලු ලකුණු</string>
     <string name="climbs_count_text">නැගීම් ගණන</string>
     <string name="language_text">භාශාව</string>

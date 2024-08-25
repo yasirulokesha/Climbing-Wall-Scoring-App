@@ -3,7 +3,7 @@
     <string name="reset_btn_text">Reset</string>
     <string name="climb_btn_text">Climb</string>
     <string name="fall_btn_text">Fall(-3)</string>
-    <string name="total_score" translatable="false">Start</string>
+    <string name="total_score">Start</string>
     <string name="total_score_text">Total Score</string>
     <string name="climbs_count" translatable="false">0</string>
     <string name="climbs_count_text">Climbs</string>

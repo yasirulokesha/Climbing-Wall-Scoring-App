@@ -83,9 +83,13 @@ class MainActivity : ComponentActivity() {
             climbs <= 9 -> scoreTextView.setTextColor(ContextCompat.getColor(this, R.color.red))
             else -> scoreTextView.setTextColor(ContextCompat.getColor(this, R.color.default_blue))
         }
+
+        Log.i("App", "Updated the score!")
     }
 
     fun onClickClimb(view: View?){
+        Log.i("App", "Clicked the climb button!")
+
         val climbBtn = findViewById<Button>(R.id.climb_btn)
 
         when{
@@ -108,22 +112,26 @@ class MainActivity : ComponentActivity() {
     }
 
     fun onClickFall(view: View?){
+        Log.i("App", "Clicked the fall button!")
+
         val resetBtn = findViewById<Button>(R.id.reset_btn)
         val fallBtn = findViewById<Button>(R.id.fall_btn)
         val climbBtn = findViewById<Button>(R.id.climb_btn)
 
-        score = fall(score)
+        if (score != 0){
+            score = fall(score)
 
-        updateDashboard()
+            updateDashboard()
 
-        resetBtn.visibility = View.INVISIBLE
-        fallBtn.visibility = View.INVISIBLE
-        climbBtn.text = getString(R.string.try_again)
-        isFailed = true
-
+            isFailed = true
+            resetBtn.visibility = View.INVISIBLE
+            fallBtn.visibility = View.INVISIBLE
+            climbBtn.text = getString(R.string.try_again)
+        }
     }
 
     fun onClickReset(view: View?){
+        Log.i("App", "Clicked the reset button!")
         score = 0
         climbs = 0
         updateDashboard()
