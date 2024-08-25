@@ -57,13 +57,16 @@ class MainActivity : ComponentActivity() {
             score == 0 -> {
                 scoreTextView.text = getString(R.string.total_score)
             }
+            score == 18 -> {
+                scoreTextView.text = getString(R.string.congratulations_txt)
+            }
             score > 0 -> {
                 scoreTextView.text = score.toString()
             }
         }
 
         when {
-            isFailed -> {
+            isFailed || score == 18 -> {
                 resetBtn.visibility = View.INVISIBLE
                 fallBtn.visibility = View.INVISIBLE
             } else -> {

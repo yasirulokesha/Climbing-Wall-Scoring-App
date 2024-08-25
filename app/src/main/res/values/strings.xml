@@ -13,4 +13,5 @@
         <item>English</item>
     </string-array>
     <string name="try_again">Try Again !</string>
+    <string name="congratulations_txt">You did it!</string>
 </resources>
