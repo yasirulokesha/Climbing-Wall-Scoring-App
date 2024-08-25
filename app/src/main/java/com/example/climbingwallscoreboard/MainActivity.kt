@@ -8,17 +8,16 @@ import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 
 class MainActivity : ComponentActivity() {
 
     private var score:Int = 0
     private var climbs:Int = 0
 
-    private val scoreInstance:String = ""
-    private val climbsInstance:String = ""
+    private val savedState:String = ""
 
-    private val resetBtn: Button = findViewById<Button>(R.id.reset_btn)
-    private val fallBtn: Button = findViewById<Button>(R.id.fall_btn)
+    private val resultArray:IntArray = intArrayOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,26 +26,22 @@ class MainActivity : ComponentActivity() {
         setContentView(R.layout.scoreboard)
 
         if (savedInstanceState != null) {
-            score = savedInstanceState.getInt(
-                scoreInstance,
-                0
-            ) // Default to 0 if key not found
-            climbs = savedInstanceState.getInt(
-                climbsInstance,
-                0
-            ) // Default to 0 if key not found
-
-            Log.i("savedInstnace", scoreInstance)
+            val savedState = savedInstanceState.getIntArray(savedState)
+            if (savedState != null && savedState.size == 2) {
+                score = savedState[0]  // Restore the score value
+                climbs = savedState[1] // Restore the climbs value
+            }
         }
 
         updateDashboard()
-        Log.i("notsavedInstnace", scoreInstance)
     }
 
     private fun updateDashboard(){
         val scoreTextView = findViewById<TextView>(R.id.score)
         val climbsCount = findViewById<TextView>(R.id.climbsCount)
 
+        val resetBtn = findViewById<Button>(R.id.reset_btn)
+        val fallBtn = findViewById<Button>(R.id.fall_btn)
 
         when {
             score == 0 -> {
@@ -83,11 +78,18 @@ class MainActivity : ComponentActivity() {
     }
 
     fun onClickFall(view: View?){
+        val resetBtn = findViewById<Button>(R.id.reset_btn)
+        val fallBtn = findViewById<Button>(R.id.fall_btn)
+
         score = fall(score)
-        climbs = 0
+
         println("Score$score\n Climbs$climbs")
+
         updateDashboard()
+
         score = 0
+        climbs = 0
+
         resetBtn.visibility = View.INVISIBLE
         fallBtn.visibility = View.INVISIBLE
 
@@ -100,10 +102,14 @@ class MainActivity : ComponentActivity() {
         updateDashboard()
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.i("onSaveInstate: ", "saved")
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(scoreInstance, score)
-        outState.putInt(climbsInstance, climbs)
+        outState.putIntArray(savedState, intArrayOf(score,climbs))
     }
 
 }
