@@ -11,6 +11,10 @@ import androidx.core.content.ContextCompat
 
 class MainActivity : ComponentActivity() {
 
+    private var climbBtn :Button? = null
+    private var resetBtn :Button? = null
+    private var fallBtn :Button? = null
+
     private var score:Int = 0
     private var climbs:Int = 0
 
@@ -19,6 +23,11 @@ class MainActivity : ComponentActivity() {
     private val savedState:String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        climbBtn = findViewById<Button>(R.id.climb_btn)
+        resetBtn = findViewById<Button>(R.id.reset_btn)
+        fallBtn = findViewById<Button>(R.id.fall_btn)
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.scoreboard)
@@ -41,7 +50,13 @@ class MainActivity : ComponentActivity() {
             }
         }
 
+        climbBtn?.setOnClickListener { onClickClimb() }
+        resetBtn?.setOnClickListener{ onClickReset() }
+        fallBtn?.setOnClickListener{ onClickFall() }
+
         updateDashboard()
+
+
 
         Log.i("LIFECYCLE", "Created!")
     }
@@ -87,7 +102,7 @@ class MainActivity : ComponentActivity() {
         Log.i("App", "Updated the score!")
     }
 
-    fun onClickClimb(view: View?){
+    private fun onClickClimb() {
         Log.i("App", "Clicked the climb button!")
 
         val climbBtn = findViewById<Button>(R.id.climb_btn)
@@ -111,7 +126,7 @@ class MainActivity : ComponentActivity() {
         updateDashboard()
     }
 
-    fun onClickFall(view: View?){
+    fun onClickFall(){
         Log.i("App", "Clicked the fall button!")
 
         val resetBtn = findViewById<Button>(R.id.reset_btn)
@@ -130,7 +145,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    fun onClickReset(view: View?){
+    fun onClickReset(){
         Log.i("App", "Clicked the reset button!")
         score = 0
         climbs = 0
